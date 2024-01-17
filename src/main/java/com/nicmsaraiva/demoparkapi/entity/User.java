@@ -3,6 +3,7 @@ package com.nicmsaraiva.demoparkapi.entity;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.io.Serializable;
@@ -11,7 +12,7 @@ import java.util.Objects;
 
 @Entity
 @Table(name = "users")
-@Getter @Setter @AllArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public class User implements Serializable {
     @Id
     @Column(name = "id")

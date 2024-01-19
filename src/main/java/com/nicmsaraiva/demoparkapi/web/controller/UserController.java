@@ -22,7 +22,13 @@ public class UserController {
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getById(@PathVariable Long id) {
-        User user = userService.findById(id);
-        return ResponseEntity.ok(user);
+        User returnedUser = userService.findById(id);
+        return ResponseEntity.ok(returnedUser);
+    }
+
+    @PatchMapping("/{id}")
+    public ResponseEntity<User> updatePassword(@PathVariable Long id, @RequestBody User user) {
+        User updatedUser = userService.updatePassword(id, user.getPassword());
+        return ResponseEntity.ok(updatedUser);
     }
 }

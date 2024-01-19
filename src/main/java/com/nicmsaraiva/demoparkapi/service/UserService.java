@@ -22,4 +22,11 @@ public class UserService {
                 () -> new RuntimeException("User not exists.")
         );
     }
+
+    @Transactional
+    public User updatePassword(Long id, String password) {
+        User user = findById(id);
+        user.setPassword(password);
+        return user;
+    }
 }

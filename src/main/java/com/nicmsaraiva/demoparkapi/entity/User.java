@@ -40,6 +40,14 @@ public class User implements Serializable {
 
     @Column(name = "modified_by")
     private String modifiedBy;
+
+    public User(long id, String username, String password, Role role) {
+        this.id = id;
+        this.username = username;
+        this.password = password;
+        this.role = role;
+    }
+
     public enum Role {
         ROLE_ADMIN, ROLE_CLIENT
     }

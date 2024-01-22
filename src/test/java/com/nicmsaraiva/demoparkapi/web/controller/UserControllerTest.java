@@ -9,6 +9,8 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
 import java.util.Arrays;
 import java.util.List;
 
@@ -58,7 +60,6 @@ public class UserControllerTest {
                 .andExpect(content().json(responseBody))
                 .andExpect(jsonPath("$.id").value(12L));
     }
-
     @Test
     public void UserController_GetUsers_ReturnOK() throws  Exception {
         User firstUser = new User(24L, "nick@test.com", "pwd123", User.Role.ROLE_ADMIN);
@@ -75,5 +76,28 @@ public class UserControllerTest {
                 .andExpect(jsonPath("$", hasSize(2)))
                 .andExpect(jsonPath("$[0].id").value(24L))
                 .andExpect(jsonPath("$[1].id").value(12L));
+    }
+
+    @Test
+    public void UserController_UpdatePassword_ReturnOK() throws Exception {
+        User user = new User(12L, "joe@test.com", "password321", User.Role.ROLE_CLIENT);
+        when(userService.updatePassword(anyLong(), anyString()))
+                .thenAnswer(invocation -> {
+                    Long userId = invocation.getArgument(0);
+                    String newPassword = invocation.getArgument(1);
+
+                    user.setPassword(newPassword);
+                    return user;
+                });
+
+        String body = objectMapper.writeValueAsString(user);
+
+        mockMvc.perform(patch(BASE_URL+"/{id}", user.getId())
+                        .content(body)
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(body))
+                .andExpect(jsonPath("$.id").value(12L))
+                .andExpect(jsonPath("$.password").value("password321"));
     }
 }

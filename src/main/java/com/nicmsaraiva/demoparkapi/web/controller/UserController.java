@@ -2,6 +2,9 @@ package com.nicmsaraiva.demoparkapi.web.controller;
 
 import com.nicmsaraiva.demoparkapi.entity.User;
 import com.nicmsaraiva.demoparkapi.service.UserService;
+import com.nicmsaraiva.demoparkapi.web.dto.UserCreateDTO;
+import com.nicmsaraiva.demoparkapi.web.dto.UserResponseDTO;
+import com.nicmsaraiva.demoparkapi.web.dto.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,9 +20,9 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<User> create(@RequestBody  User user) {
-        User newUser = userService.save(user);
-        return ResponseEntity.status(HttpStatus.CREATED).body(newUser);
+    public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO userCreateDTO) {
+        User newUser = userService.save(UserMapper.toUser(userCreateDTO));
+        return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(newUser));
     }
 
     @GetMapping("/{id}")

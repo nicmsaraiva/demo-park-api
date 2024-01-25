@@ -6,6 +6,7 @@ import com.nicmsaraiva.demoparkapi.web.dto.UserCreateDTO;
 import com.nicmsaraiva.demoparkapi.web.dto.UserResponseDTO;
 import com.nicmsaraiva.demoparkapi.web.dto.UserUpdatePasswordDTO;
 import com.nicmsaraiva.demoparkapi.web.dto.mapper.UserMapper;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -21,7 +22,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserResponseDTO> create(@RequestBody UserCreateDTO userCreateDTO) {
+    public ResponseEntity<UserResponseDTO> create(@Valid @RequestBody UserCreateDTO userCreateDTO) {
         User newUser = userService.save(UserMapper.toUser(userCreateDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(UserMapper.toDTO(newUser));
     }

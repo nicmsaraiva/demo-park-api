@@ -34,7 +34,7 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<Void> updatePassword(@PathVariable Long id, @RequestBody UserUpdatePasswordDTO dto) {
+    public ResponseEntity<Void> updatePassword(@Valid @PathVariable Long id, @RequestBody UserUpdatePasswordDTO dto) {
         User updatedUser = userService.updatePassword(id, dto.getCurrentPassword(), dto.getNewPassword(), dto.getConfirmPassword());
         return ResponseEntity.noContent().build();
     }

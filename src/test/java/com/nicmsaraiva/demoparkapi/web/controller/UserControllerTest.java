@@ -104,4 +104,28 @@ public class UserControllerTest {
                         .content(requestBody))
                 .andExpect(status().isBadRequest());
     }
+
+    @Test
+    public void shouldReturnBadRequestForCreateUserWithoutPassword() throws  Exception {
+        UserCreateDTO userCreateDTO = new UserCreateDTO("nick@test.com", null);
+
+        String requestBody = objectMapper.writeValueAsString(userCreateDTO);
+
+        mockMvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void shouldReturnBadRequestForCreateUserWithoutEmail() throws  Exception {
+        UserCreateDTO userCreateDTO = new UserCreateDTO(null, "pwd123");
+
+        String requestBody = objectMapper.writeValueAsString(userCreateDTO);
+
+        mockMvc.perform(post(BASE_URL)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestBody))
+                .andExpect(status().isBadRequest());
+    }
 }

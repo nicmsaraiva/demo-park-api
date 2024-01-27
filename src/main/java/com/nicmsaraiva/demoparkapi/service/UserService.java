@@ -1,6 +1,8 @@
 package com.nicmsaraiva.demoparkapi.service;
 
 import com.nicmsaraiva.demoparkapi.entity.User;
+import com.nicmsaraiva.demoparkapi.exception.EntityNotFoundException;
+import com.nicmsaraiva.demoparkapi.exception.PasswordInvalidException;
 import com.nicmsaraiva.demoparkapi.exception.UsernameUniqueViolationException;
 import com.nicmsaraiva.demoparkapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -27,18 +29,18 @@ public class UserService {
     @Transactional(readOnly = true)
     public User findById(Long id) {
         return userRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("User not exists.")
+                () -> new EntityNotFoundException(String.format("User '%s' not exists.", id))
         );
     }
 
     @Transactional
     public User updatePassword(Long id, String currentPassword, String newPassword, String confirmPassword) {
         if (!newPassword.equals(confirmPassword)) {
-            throw new RuntimeException("New password does not match password confirmation.");
+            throw new PasswordInvalidException("New password does not match password confirmation.");
         }
         User user = findById(id);
         if (!user.getPassword().equals(currentPassword)) {
-            throw new RuntimeException("Your password does not match.");
+            throw new PasswordInvalidException("Your password does not match.");
         }
         user.setPassword(newPassword);
         return user;

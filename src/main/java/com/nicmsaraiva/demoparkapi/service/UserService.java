@@ -1,6 +1,7 @@
 package com.nicmsaraiva.demoparkapi.service;
 
 import com.nicmsaraiva.demoparkapi.entity.User;
+import com.nicmsaraiva.demoparkapi.exception.UsernameUniqueViolationException;
 import com.nicmsaraiva.demoparkapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -15,7 +16,12 @@ public class UserService {
 
     @Transactional
     public User save(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (org.springframework.dao.DataIntegrityViolationException ex) {
+            throw new UsernameUniqueViolationException(String.format("Username '%s' already exists", user.getUsername()));
+        }
+
     }
 
     @Transactional(readOnly = true)
